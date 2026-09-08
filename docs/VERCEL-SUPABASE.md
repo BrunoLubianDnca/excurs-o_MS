@@ -30,8 +30,8 @@ Se você preferir preservar o nome `origin` atual, use `git remote set-url origi
 ## 3. Publicar na Vercel
 
 1. Acesse <https://vercel.com/new> e importe o repositório do GitHub.
-2. Mantenha **Root Directory** na raiz do repositório.
-3. O arquivo `vercel.json` já define o comando e a pasta de build; não é preciso configurar Docker.
+2. Você pode manter **Root Directory** na raiz do repositório ou selecionar `client`; as duas opções estão configuradas.
+3. O arquivo `vercel.json` correspondente já define o comando e a pasta `dist-familia`; não é preciso configurar Docker.
 4. Em **Environment Variables**, adicione:
 
 | Nome | Valor |
