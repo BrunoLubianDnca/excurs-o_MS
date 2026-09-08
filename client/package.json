@@ -7,6 +7,7 @@
     "dev": "vite",
     "prebuild": "node scripts/generate-icons.mjs",
     "build": "vite build",
+    "build:vercel": "npm --prefix .. run build:vercel",
     "build:familia": "vite build --mode familia",
     "dev:familia": "vite --mode familia --open /familia.html",
     "build:analyze": "vite build --mode analyze",
