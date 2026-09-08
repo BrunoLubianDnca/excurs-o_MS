@@ -50,6 +50,11 @@ export function setPreReconnectHook(fn: (() => Promise<void>) | null): void {
 }
 
 function getWsUrl(wsToken: string): string {
+  const envWs = import.meta.env.VITE_WS_URL
+  if (envWs) {
+    const base = envWs.replace(/^http/, 'ws')
+    return `${base.replace(/\/$/, '')}/ws?token=${wsToken}`
+  }
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws'
   return `${protocol}://${location.host}/ws?token=${wsToken}`
 }

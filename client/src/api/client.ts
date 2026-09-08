@@ -136,7 +136,7 @@ function translateRateLimit(): string {
 }
 
 export const apiClient: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   withCredentials: true,
   timeout: 8000,
   headers: {
