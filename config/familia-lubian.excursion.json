@@ -1,0 +1,134 @@
+{
+  "trip": {
+    "title": "Excursão Família Lubian",
+    "description": "Festa de 80 anos — encontro da Família Lubian. Trecho Blumenau/SC × Tacuru/MS, com destino confirmado pelo Google Maps na Rua Izidora Vilhalva, 380. Saída em 30/10/2026 e retorno-base em 02/11/2026 (a cotação da Catarinense também oferece 01/11/2026). Horários ainda serão definidos no fuso de Mato Grosso do Sul.",
+    "start_date": "2026-10-30",
+    "end_date": "2026-11-02",
+    "currency": "BRL",
+    "day_count": 4,
+    "timezone": "America/Campo_Grande"
+  },
+  "map": {
+    "provider": "maplibre-gl",
+    "style": "https://tiles.openfreemap.org/styles/bright",
+    "description": "Mapa vetorial claro, com ruas e cidades destacadas, semelhante ao visual do Google Maps e sem necessidade de chave paga."
+  },
+  "locations": {
+    "departure": {
+      "name": "Embarque — Blumenau",
+      "description": "Ponto de saída da excursão da Família Lubian",
+      "address": "Rua Augusta, 45, Garcia, Blumenau - SC, 89022-475, Brasil",
+      "latitude": -26.9555786,
+      "longitude": -49.069499,
+      "timezone": "America/Sao_Paulo",
+      "day_date": "2026-10-30",
+      "notes": "Embarque informado no orçamento. Horário de saída ainda a definir com a transportadora.",
+      "assignment_notes": "Usar o horário de Blumenau/SC (UTC−3)."
+    },
+    "destination": {
+      "name": "Destino — Festa de 80 anos",
+      "description": "Encontro da Família Lubian em Tacuru/MS",
+      "address": "Rua Izidora Vilhalva, 380, Tacuru - MS, 79975-000, Brasil",
+      "latitude": -23.6337505,
+      "longitude": -55.0129758,
+      "timezone": "America/Campo_Grande",
+      "maps_url": "https://maps.app.goo.gl/6qiRnGaLAKnPYbM38",
+      "day_date": "2026-10-31",
+      "notes": "Pino exato enviado pela família. Em Mato Grosso do Sul, os relógios ficam uma hora atrás de Blumenau.",
+      "assignment_notes": "Chegada prevista no Dia 2. Todos os horários deste local devem ser anotados no horário de Mato Grosso do Sul (UTC−4)."
+    }
+  },
+  "transport": {
+    "name": "Ônibus rodoviário — orçamento principal (Catarinense)",
+    "category": "transport",
+    "total_price": 18000,
+    "currency": "BRL",
+    "persons": 36,
+    "note": "Cotação solicitada à Catarinense. Embarque na Rua Augusta, 45, Garcia, Blumenau/SC e destino confirmado pelo Google Maps na Rua Izidora Vilhalva, 380, Tacuru/MS. Ônibus rodoviário de 46 lugares com ar-condicionado, sanitário e conservadora de água e gelo. A proposta considera 23 adultos e 9 crianças (32 pessoas), mas a lista atual contém 36 nomes; confirmar capacidade e valor. Nota fiscal para pessoa física. Pagamento por boleto ou Pix, com quitação total até 3 dias antes da viagem. Alimentação e hospedagem dos motoristas e estacionamento do veículo são de responsabilidade do contratante. Exige lista prévia com nome completo e CPF."
+  },
+  "booking": {
+    "title": "Ônibus Catarinense — Blumenau/SC → Tacuru/MS",
+    "type": "bus",
+    "status": "pending",
+    "start_date": "2026-10-30",
+    "end_date": "2026-11-02",
+    "location": "Blumenau/SC → Tacuru/MS",
+    "url": "https://maps.app.goo.gl/6qiRnGaLAKnPYbM38",
+    "notes": "Cotação de R$ 18.000,00 para ônibus rodoviário de 46 lugares. Embarque: Rua Augusta, 45, Garcia, Blumenau/SC. Destino confirmado pelo Google Maps: Rua Izidora Vilhalva, 380, Tacuru/MS. Horários ainda a definir. Tacuru usa America/Campo_Grande (UTC−4), uma hora atrás de Blumenau.",
+    "traveler_scope": "passengers",
+    "endpoints": [
+      {
+        "role": "from",
+        "sequence": 0,
+        "name": "Rua Augusta, 45, Garcia, Blumenau/SC",
+        "code": null,
+        "lat": -26.9555786,
+        "lng": -49.069499,
+        "timezone": "America/Sao_Paulo",
+        "local_date": "2026-10-30",
+        "local_time": null
+      },
+      {
+        "role": "to",
+        "sequence": 1,
+        "name": "Rua Izidora Vilhalva, 380, Tacuru/MS",
+        "code": null,
+        "lat": -23.6337505,
+        "lng": -55.0129758,
+        "timezone": "America/Campo_Grande",
+        "local_date": "2026-10-31",
+        "local_time": null
+      }
+    ]
+  },
+  "passengers": [
+    "Rafaela",
+    "Mirian",
+    "Fabiano",
+    "João",
+    "Matias",
+    "Marinete",
+    "Luiz",
+    "Nando",
+    "Rosiane",
+    "Sidemar",
+    "Heitor",
+    "Dayane",
+    "Bruna",
+    "Jorge",
+    "César",
+    "Helena",
+    "Tati",
+    "Dani",
+    "Willian",
+    "José",
+    "Francisco",
+    "Ricardo",
+    "Sophia",
+    "Bruno",
+    "Douglas",
+    "Tia Cida",
+    "Marielle",
+    "Lucas",
+    "Mateus",
+    "Bely",
+    "Pedro",
+    "Marina",
+    "Gili",
+    "Karine",
+    "Henrique",
+    "Helena"
+  ],
+  "tasks": [
+    "Confirmar horários e escolher retorno em 01/11 ou 02/11 com a Catarinense",
+    "Confirmar com a Catarinense se R$ 18.000 cobre os 36 nomes da lista (cotação informa 32)",
+    "Identificar as duas passageiras chamadas Helena com sobrenome ou apelido",
+    "Coletar nome completo, CPF, telefone e contato de emergência de todos",
+    "Planejar quitação de R$ 18.000 até 27/10/2026 por boleto ou Pix",
+    "Distribuir os 46 assentos do ônibus",
+    "Confirmar hospedagem, refeições e roteiro em Tacuru/MS",
+    "Identificar os 23 adultos e as 9 crianças, com idade de cada criança",
+    "Orçar alimentação e hospedagem dos motoristas e estacionamento do ônibus",
+    "Enviar à Catarinense a lista final com nome completo e CPF"
+  ]
+}
