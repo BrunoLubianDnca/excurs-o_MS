@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
   "installCommand": "npm install",
-  "buildCommand": "npm run build --workspace=shared && npm run build --workspace=client",
-  "outputDirectory": "client/dist",
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/api/:path*",
@@ -14,7 +14,7 @@
       "destination": "https://excurs-o-ms.onrender.com/uploads/:path*"
     },
     {
-      "source": "/((?!.*\\.[\\w]+$).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
