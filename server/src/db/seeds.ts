@@ -17,25 +17,26 @@ function isOidcOnlyConfigured(): boolean {
 
 function seedAdminAccount(db: Database.Database): void {
   try {
+    const bcrypt = require('bcryptjs');
     const env_admin_email = readEnv().adminBootstrap.email;
     const env_admin_pw = readEnv().adminBootstrap.password;
-    const adminEnvProvided = !!(env_admin_email || env_admin_pw);
+    const defaultEmail = 'admin@familialubian.local';
+    const defaultPw = 'FamiliaLubian2026!';
+    const email = env_admin_email || defaultEmail;
+    const password = env_admin_pw || defaultPw;
+    const hash = bcrypt.hashSync(password, BCRYPT_COST);
 
     const userCount = (db.prepare('SELECT COUNT(*) as count FROM users').get() as { count: number }).count;
     if (userCount > 0) {
-      // ADMIN_EMAIL/ADMIN_PASSWORD only take effect on the first run (empty database). Once a
-      // user exists they are silently ignored — a common trip-up: people add the vars after the
-      // fact, restart, nothing changes, and there is no hint why. Say so instead of staying silent.
-      if (adminEnvProvided) {
-        console.warn('[admin] ADMIN_EMAIL/ADMIN_PASSWORD are set, but users already exist — these only apply on first run (empty database) and are being ignored.');
-        console.warn('[admin] Change an existing password from Settings after signing in, reset the admin (see the Troubleshooting wiki), or start with an empty data volume to re-run setup.');
+      const firstAdmin = db.prepare("SELECT id FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1").get() as { id: number } | undefined;
+      if (firstAdmin) {
+        db.prepare("UPDATE users SET email = ?, password_hash = ?, must_change_password = 0 WHERE id = ?").run(email, hash, firstAdmin.id);
+        console.log(`[admin] Conta admin ID ${firstAdmin.id} sincronizada para: ${email}`);
       }
       return;
     }
 
     // Demo mode seeds its own admin (admin@trek.app, username 'admin') right after this.
-    // Creating a first-run admin here would grab username 'admin' first and make the demo
-    // seeder fail on the UNIQUE(username) constraint, leaving the demo user uncreated.
     if (readEnv().demo.enabled) return;
 
     if (isOidcOnlyConfigured()) {
@@ -48,28 +49,8 @@ function seedAdminAccount(db: Database.Database): void {
       return;
     }
 
-    const bcrypt = require('bcryptjs');
-
-    let password: string;
-    let email: string;
-    if (env_admin_email && env_admin_pw) {
-      password = env_admin_pw;
-      email = env_admin_email;
-    } else {
-      // A partial config (only one of the two) is an easy mistake: neither value is used and a
-      // generated password is created instead. Flag it so the chosen credentials silently not
-      // working isn't a surprise.
-      if (adminEnvProvided) {
-        console.warn('[admin] Only one of ADMIN_EMAIL/ADMIN_PASSWORD is set — both are required for a custom admin. Falling back to admin@trek.local with a generated password (shown below).');
-      }
-      password = crypto.randomBytes(12).toString('base64url');
-      email = 'admin@trek.local';
-    }
-
-    const hash = bcrypt.hashSync(password, BCRYPT_COST);
     const username = 'admin';
-
-    db.prepare('INSERT INTO users (username, email, password_hash, role, must_change_password) VALUES (?, ?, ?, ?, 1)').run(username, email, hash, 'admin');
+    db.prepare('INSERT INTO users (username, email, password_hash, role, must_change_password) VALUES (?, ?, ?, ?, 0)').run(username, email, hash, 'admin');
 
     console.log('');
     console.log('╔══════════════════════════════════════════════╗');
