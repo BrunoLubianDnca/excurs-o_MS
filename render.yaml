@@ -16,7 +16,7 @@ services:
       - key: DEFAULT_LANGUAGE
         value: br
       - key: TZ
-        value: America/Campo_Grande
+        value: America/Sao_Paulo
       - key: APP_URL
         value: https://excurs-o-ms.onrender.com
       - key: ADMIN_EMAIL
