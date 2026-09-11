@@ -51,6 +51,7 @@ afterEach(() => {
   setPreReconnectHook(null)
   vi.useRealTimers()
   vi.restoreAllMocks()
+  vi.unstubAllEnvs()
   Object.defineProperty(window, 'location', { writable: true, configurable: true, value: realLocation })
 })
 
@@ -61,6 +62,21 @@ async function openSocket(): Promise<MockWebSocket> {
   return lastSocket()
 }
 
+describe('websocket > split deployment', () => {
+  it('connects directly to the backend when built for Vercel', async () => {
+    vi.stubEnv('MODE', 'vercel')
+    vi.stubEnv('VITE_WS_URL', '')
+    const sock = await openSocket()
+    expect(sock.url).toBe('wss://excurs-o-ms.onrender.com/ws?token=ws-tok')
+  })
+
+  it('allows a configured backend to override the Vercel default', async () => {
+    vi.stubEnv('MODE', 'vercel')
+    vi.stubEnv('VITE_WS_URL', 'https://backend.example/')
+    const sock = await openSocket()
+    expect(sock.url).toBe('wss://backend.example/ws?token=ws-tok')
+  })
+})
 describe('websocket > active trips', () => {
   it('FE-WSCORE-001: getActiveTrips lists the joined trips as strings', async () => {
     expect(getActiveTrips()).toEqual([])

@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 const configPath = resolve(process.argv[2] || 'config/familia-lubian.excursion.json')
-const appUrl = (process.env.TREK_SETUP_URL || 'http://localhost:3000').replace(/\/$/, '')
+const appUrl = (process.env.TREK_SETUP_URL || 'http://127.0.0.1:3001').replace(/\/$/, '')
 const email = process.env.TREK_SETUP_EMAIL
 const password = process.env.TREK_SETUP_PASSWORD
 
@@ -37,6 +37,7 @@ async function main() {
   let token = ''
   async function request(path, options = {}) {
     const response = await fetch(`${appUrl}/api${path}`, {
+      signal: AbortSignal.timeout(60000),
       ...options,
       headers: {
         Accept: 'application/json',
@@ -70,6 +71,8 @@ async function main() {
       method: 'POST',
       body: JSON.stringify({
         settings: {
+          language: 'br',
+          default_currency: config.trip.currency || 'BRL',
           map_provider: config.map.provider,
           maplibre_style: config.map.style,
         },
@@ -153,7 +156,7 @@ async function main() {
       }
     } catch (error) {
       if (error.status === 404) {
-        console.warn('[excursion-setup] Addon de custos desativado; ative-o e execute novamente para incluir o ônibus.')
+        throw new Error('Ative o addon Costs e execute novamente para concluir a excursão.')
       } else {
         throw error
       }
@@ -279,7 +282,7 @@ async function main() {
       console.log(`[excursion-setup] Tarefas de organização criadas: ${tasksCreated}.`)
     } catch (error) {
       if (error.status === 404) {
-        console.warn('[excursion-setup] Addon de listas desativado; ative-o e execute novamente para incluir as tarefas.')
+        throw new Error('Ative o addon Lists e execute novamente para concluir a excursão.')
       } else {
         throw error
       }

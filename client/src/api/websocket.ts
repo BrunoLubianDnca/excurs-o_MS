@@ -50,7 +50,8 @@ export function setPreReconnectHook(fn: (() => Promise<void>) | null): void {
 }
 
 function getWsUrl(wsToken: string): string {
-  const envWs = import.meta.env.VITE_WS_URL
+  const envWs = import.meta.env.VITE_WS_URL ||
+    (import.meta.env.MODE === 'vercel' ? 'https://excurs-o-ms.onrender.com' : '')
   if (envWs) {
     const base = envWs.replace(/^http/, 'ws')
     return `${base.replace(/\/$/, '')}/ws?token=${wsToken}`

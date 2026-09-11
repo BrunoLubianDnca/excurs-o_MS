@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'analyze' &&
       visualizer({ filename: 'dist/stats.html', gzipSize: true, brotliSize: true }),
-    mode !== 'familia' && VitePWA({
+    VitePWA({
       registerType: 'autoUpdate',
       // Serve the generated manifest (+ dev SW) in development too, so the installed
       // PWA can be tested against the dev server. Without this, dev ships no
@@ -212,9 +212,9 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       manifest: {
-        name: 'TREK \u2014 Travel Planner',
-        short_name: 'TREK',
-        description: 'Travel Resource & Exploration Kit',
+        name: 'Excursão Família Lubian — TREK',
+        short_name: 'Família Lubian',
+        description: 'Planejamento completo da excursão Blumenau/SC → Tacuru/MS',
         theme_color: '#111827',
         background_color: '#0f172a',
         display: 'standalone',
@@ -236,7 +236,7 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   resolve: { alias: [rtlTextAlias] },
   build: {
-    outDir: mode === 'familia' ? 'dist-familia' : 'dist',
+    outDir: 'dist',
     // Pin the output level instead of inheriting whatever the current Vite default
     // is, so a toolchain bump can't silently change which browsers still work.
     target: 'es2022',
@@ -256,7 +256,6 @@ export default defineConfig(({ mode }) => ({
     // Those already sit in async chunks of their own with hashes that survive a
     // release; a group would only rename them, and at worst make them eager.
     rolldownOptions: {
-      ...(mode === 'familia' ? { input: 'familia.html' } : {}),
       output: {
         codeSplitting: {
           groups: [

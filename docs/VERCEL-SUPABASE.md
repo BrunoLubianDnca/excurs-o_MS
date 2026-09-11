@@ -1,67 +1,45 @@
-# Publicar a viagem na Vercel com Supabase
+# Publicar o TREK completo com Vercel e backend Node
 
-Esta versão foi preparada para uma única viagem, sem Docker e sem servidor próprio. A Vercel publica as telas; o Supabase guarda as alterações para todos os celulares.
+## O que mudou
 
-## 1. Criar o banco no Supabase
+O commit 1130568 publicava `familia.html`/`dist-familia` e removia os proxies da
+API. Esse caminho executava outro aplicativo, sem os módulos do TREK.
+Agora ambos os `vercel.json` publicam `index.html`/`dist` do TREK completo.
 
-1. Acesse <https://supabase.com/dashboard> e crie um projeto gratuito.
-2. No menu do projeto, abra **SQL Editor** e clique em **New query**.
-3. Copie todo o conteúdo de [`supabase/schema-and-seed.sql`](../supabase/schema-and-seed.sql), cole e clique em **Run**.
-4. Em **Project Settings > API**, copie:
-   - **Project URL**;
-   - **Publishable key** ou a chave **anon public**.
+Supabase não substitui o servidor NestJS/SQLite do TREK. O SQL antigo permanece
+apenas como histórico. Não execute aquele SQL para instalar o TREK e não apague
+uma base já utilizada: eventuais registros adicionados lá precisam ser migrados
+separadamente.
 
-O script cria a viagem, os 36 passageiros, as 10 pendências, o ônibus de 46 lugares e o orçamento inicial de R$ 18.000.
+## Backend
 
-## 2. Enviar ao GitHub
+No serviço Node existente (`https://excurs-o-ms.onrender.com`):
 
-Crie um repositório **privado** vazio no GitHub. Neste projeto, troque o remoto do TREK original pelo seu repositório:
+- Instalação/build: `npm ci && npm run build`.
+- Inicialização: `npm start`.
+- Configure `NODE_ENV=production`, `HOST=0.0.0.0`, `DEFAULT_LANGUAGE=br`,
+  `TZ=America/Campo_Grande`, `COOKIE_SECURE=true` e `APP_URL` com a URL pública.
+- Para a primeira instalação, configure `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
+  Para uma base existente, mantenha a conta atual; use `TREK_SETUP_EMAIL` e
+  `TREK_SETUP_PASSWORD` apenas para preparar a excursão.
+- Preserve `server/data` e `server/uploads` em disco persistente. Uma instância
+  com sistema de arquivos descartável não é adequada para guardar esta viagem.
 
-```powershell
-git remote rename origin upstream
-git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
-git add .
-git commit -m "Configura excursao Familia Lubian"
-git push -u origin main
-```
+O backend também serve o TREK diretamente. Usar sua URL para toda a aplicação
+simplifica uploads, WebSocket, cookies e integrações.
 
-Se você preferir preservar o nome `origin` atual, use `git remote set-url origin` com a URL do seu repositório. Não tente enviar alterações ao repositório oficial do TREK.
+## Frontend na Vercel
 
-## 3. Publicar na Vercel
+Importe a raiz ou `client`. O comando configurado é `npm run build:vercel`,
+com saída `dist`. O frontend usa `/api` e `/uploads` pelo proxy para o backend.
+O modo `vercel` conecta o WebSocket diretamente ao serviço Render existente.
+`VITE_WS_URL` permite substituir esse endereço (origem sem o sufixo `/ws`).
+Se o backend mudar, ajuste também os destinos nos dois arquivos `vercel.json`.
 
-1. Acesse <https://vercel.com/new> e importe o repositório do GitHub.
-2. Você pode manter **Root Directory** na raiz do repositório ou selecionar `client`; as duas opções estão configuradas.
-3. O arquivo `vercel.json` correspondente já define o comando e a pasta `dist-familia`; não é preciso configurar Docker.
-4. Em **Environment Variables**, adicione:
+Não configure o comando `vite build --mode familia`, `familia.html` nem
+`dist-familia`. As variáveis `VITE_SUPABASE_*` não são usadas pelo TREK.
+Nunca coloque credenciais administrativas em variáveis com prefixo `VITE_`.
 
-| Nome | Valor |
-| --- | --- |
-| `VITE_SUPABASE_URL` | Project URL copiada do Supabase |
-| `VITE_SUPABASE_ANON_KEY` | Publishable key ou anon public copiada do Supabase |
-| `VITE_FAMILY_TRIP_SLUG` | `familia-lubian` |
-
-5. Clique em **Deploy**. Ao terminar, abra o endereço fornecido pela Vercel.
-
-## 4. Teste rápido
-
-No site publicado:
-
-1. marque um passageiro como confirmado;
-2. abra o mesmo link em outro celular ou numa aba anônima;
-3. confirme que a alteração aparece;
-4. adicione e remova uma pendência de teste;
-5. abra **Viagem > Abrir rota no Google Maps**.
-
-## Rodar a versão Supabase no computador
-
-Crie `client/.env.local` com as mesmas três variáveis e execute:
-
-```powershell
-npm run dev:familia --workspace=client
-```
-
-Acesse `http://localhost:5173/familia.html`.
-
-## Privacidade desta versão simples
-
-Não existe login: qualquer pessoa que possuir o link consegue visualizar e editar. Isso atende ao uso rápido de uma única viagem, mas CPF e telefone são dados pessoais. Evite preencher esses campos se o link puder circular fora da família. Caso seja necessário, o login pode ser reativado mais tarde sem trocar de hospedagem.
+Após publicar, confira login, viagem pré-carregada, inclusão de uma tarefa,
+recarregamento, upload de documento e colaboração em duas sessões. Verifique
+que `/api/health` retorna JSON e que a conexão `/ws` chega ao backend.

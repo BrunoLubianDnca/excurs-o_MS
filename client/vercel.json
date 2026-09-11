@@ -1,10 +1,41 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build:familia",
-  "outputDirectory": "dist-familia",
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/((?!assets/|sw\\.js$).*)", "destination": "/familia.html" }
-  ]
+    {
+      "source": "/api/:path*",
+      "destination": "https://excurs-o-ms.onrender.com/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://excurs-o-ms.onrender.com/uploads/:path*"
+    },
+    {
+      "destination": "https://excurs-o-ms.onrender.com/mcp",
+      "source": "/mcp"
+    },
+    {
+      "destination": "https://excurs-o-ms.onrender.com/mcp/:path*",
+      "source": "/mcp/:path*"
+    },
+    {
+      "destination": "https://excurs-o-ms.onrender.com/oauth/:path*",
+      "source": "/oauth/:path*"
+    },
+    {
+      "destination": "https://excurs-o-ms.onrender.com/.well-known/:path*",
+      "source": "/.well-known/:path*"
+    },
+    {
+      "destination": "https://excurs-o-ms.onrender.com/plugin-frame/:path*",
+      "source": "/plugin-frame/:path*"
+    },
+    {
+      "destination": "/index.html",
+      "source": "/(.*)"
+    }
+  ],
+  "installCommand": "npm ci"
 }
