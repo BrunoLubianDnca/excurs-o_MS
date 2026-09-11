@@ -138,7 +138,10 @@ function translateRateLimit(): string {
 export const apiClient: AxiosInstance = axios.create({
   baseURL: '/api',
   withCredentials: true,
-  timeout: 8000,
+  // O backend público pode estar adormecido no Render e levar alguns segundos
+  // para iniciar na primeira visita. O limite anterior de 8 s cancelava a
+  // requisição antes de o serviço terminar de acordar.
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -268,8 +271,8 @@ apiClient.interceptors.response.use(
 /**
  * POST a FormData body — the ONLY way this client should upload a file.
  *
- * The shared axios instance carries `timeout: 8000`, and axios' timeout is a whole-
- * request deadline rather than an idle one. A file upload that takes longer than 8s to
+ * The shared axios instance carries a finite request timeout, and axios' timeout is a
+ * whole-request deadline rather than an idle one. A file upload that takes longer to
  * push its body — a phone photo on a slow uplink, a 500 MB document — is aborted
  * mid-stream, which the server reports as a multer "Request aborted" (#1495).
  *
